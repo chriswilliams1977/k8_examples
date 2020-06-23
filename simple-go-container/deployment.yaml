@@ -1,0 +1,51 @@
+# This file configures the hello-world app which serves public web traffic.
+#to specify a node that a pod should run on
+#tag the node kubectl label nodes nodename hardware=high-spec
+#then use nodeselector to state node the pod should run on
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-simple-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: simple
+  template:
+    metadata:
+      labels:
+        app: simple
+    spec:
+      containers:
+      - name: go-simple
+        # Replace $GCLOUD_PROJECT with your project ID
+        image: gcr.io/williamscj-gke-demos/go-simple:latest
+        # This app listens on port 8080 for web traffic by default.
+        ports:
+        - name: go-port
+          containerPort: 8080
+        #env:
+        # - name: PORT
+        #   value: "8080"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: go-port
+          initialDelaySeconds: 15
+          timeoutSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: go-port
+          initialDelaySeconds: 15
+          timeoutSeconds: 30
+        volumeMounts:
+          - name: cred-volume
+            mountPath: /etc/creds
+            readOnly: true
+      volumes:
+          - name: cred-volume
+            secret:
+              secretName: db-secrets
+      #nodeSelector:
+      #   hardware: high-spec
