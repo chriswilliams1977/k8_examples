@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-mysql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-mysql-db
+  template:
+    metadata:
+      labels:
+        app: go-mysql-db
+    spec:
+      containers:
+        - name: go-mysql
+          image: gcr.io/williamscj-gke-demos/go-mysql:v60
+          #command: ["node", "index-db.js"]
+          ports:
+            - name: go-port
+              containerPort: 8080
+          env:
+            - name: MYSQL_HOST
+              value: mysql-service
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: rootPassword
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: database

@@ -86,16 +86,17 @@
 #pod statuses
 #pending - pod allocated but image downloading
 #succeded - containers are terminated successfully
-#failed - continers terminated and at least one has returned failure code
+#failed - containers terminated and at least one has returned failure code
 #unknown - state of pod unknown, maybe networking
 
-#K8 uses scerets to access internal API
+#K8 uses secrets to access internal API
 #sercret used for credentials, keys, pwds or secret data or ssh keys
 #volume is a dir your app can access
 #you can store secrets in file in a volume or in env vars
 #to use file create txt file
 #kubectl create secret generic [name] --from-file=[path to file]
-#generate secrets pwd echo -n "root" | base64
+#generate secrets pwd
+#echo -n "root" | base64
 #can reference secrets from env vars or a file in pod def
 
 docker_build:
