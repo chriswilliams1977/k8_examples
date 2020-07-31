@@ -1,3 +1,4 @@
+//if packages not working make sure GOLAND project is set to modules project
 package main
 
 import (
@@ -6,10 +7,6 @@ import (
 	"net/http"
 	"os"
 )
-
-func init(){
-
-}
 
 func init() {
 

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-mysql-interface-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-mysql-interface-db
+  template:
+    metadata:
+      labels:
+        app: go-mysql-interface-db
+    spec:
+      containers:
+        - name: go-mysqlinterface
+          image: gcr.io/williamscj-gke-demos/go-mysql-di:v1
+          #command: ["node", "index-db.js"]
+          ports:
+            - name: go-port
+              containerPort: 8080
+          env:
+            - name: MYSQL_HOST
+              #this is the mysql service discovery being called
+              value: mysql-interface-svc
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-interface-secrets
+                  key: rootPassword
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-interface-secrets
+                  key: database

@@ -1,10 +1,3 @@
-//The `defer` statement is used to run some code just immediately before a function returns.
-//So calling `defer db.Close()` will close the database connection pool when your `InitDB` function returns.
-//The right way to handle this is have `InitDB` return the `*sql.DB` object and then defer the close from within your main.main() function.
-//Or alternatively, you can just remove it like you have done.
-//If the database connection pool is to exist the whole time your app is running then it's fine to not close it,
-//it will be removed from memory when your Go app is terminated. Generally, it's only really necessary to call db.Close()
-//in things where the connection pool is short-lived, such as a test.
 package models
 
 import (
@@ -13,18 +6,14 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-//make sure you db connection is global so other func calling db can reference the connection
-var db *sql.DB
-var err error
-
-func InitDB(dataSourceName string, dbName string) {
+func NewDB(dataSourceName string, dbName string) (*sql.DB, error) {
 
 	// Configure the database connection
-	db, err = sql.Open("mysql", dataSourceName)
+	db, err := sql.Open("mysql", dataSourceName)
 	ErrorCheck(err)
 
 	// Initialize the first connection to the database, to see if everything works correctly.
-	//PingDB(db)
+	PingDB(db)
 
 	//Create Database using Exec. Exec is used for queries where no rows are returned.
 	_,err = db.Exec( "CREATE DATABASE IF NOT EXISTS "+dbName)
@@ -48,6 +37,7 @@ func InitDB(dataSourceName string, dbName string) {
 
 	//close the Database.
 	//defer db.Close()
+	return db, nil
 }
 
 func populateDB(db *sql.DB, dbName string){

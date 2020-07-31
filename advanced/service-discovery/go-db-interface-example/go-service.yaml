@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-mysql-interface-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: go-mysql-interface-db
+  ports:
+    - port: 80
+      targetPort: 8080

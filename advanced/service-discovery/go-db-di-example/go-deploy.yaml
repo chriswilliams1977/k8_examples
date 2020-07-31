@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-mysql-di-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-mysql-di-db
+  template:
+    metadata:
+      labels:
+        app: go-mysql-di-db
+    spec:
+      containers:
+        - name: go-mysqldi
+          image: gcr.io/williamscj-gke-demos/go-mysql-di:v1
+          #command: ["node", "index-db.js"]
+          ports:
+            - name: go-port
+              containerPort: 8080
+          env:
+            - name: MYSQL_HOST
+              #this is the mysql service discovery being called
+              value: mysql-di-svc
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-di-secrets
+                  key: rootPassword
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-di-secrets
+                  key: database
