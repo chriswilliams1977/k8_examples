@@ -1,0 +1,25 @@
+# An Ingress with 2 hosts and 3 endpoints
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: moneytree-rules
+spec:
+  rules:
+  # add hosts if by domain
+  #host: moneytree-accounts.example.com
+  #or use paths
+  - http:
+      paths:
+      - path: /accounts
+        backend:
+          serviceName: go-ingress-accounts-svc
+          servicePort: 80
+      - path: /banks
+        backend:
+          serviceName: go-ingress-banks-svc
+          servicePort: 80
+      - path: /
+        backend:
+          serviceName: go-ingress-customers-svc
+          servicePort: 80
+

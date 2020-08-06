@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-ingress-customers-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: customers
+  template:
+    metadata:
+      labels:
+        app: customers
+    spec:
+      containers:
+        - name: go-ingress-customers
+          # Replace $GCLOUD_PROJECT with your project ID
+          image: gcr.io/williamscj-gke-demos/ingress-example-customers-svc:v1
+          # This app listens on port 8082 for web traffic by default.
+          ports:
+            - name: go-port
+              containerPort: 8082

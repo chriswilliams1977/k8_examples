@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-ingress-accounts-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: accounts
+  template:
+    metadata:
+      labels:
+        app: accounts
+    spec:
+      containers:
+        - name: go-ingress-accounts
+          # Replace $GCLOUD_PROJECT with your project ID
+          image: gcr.io/williamscj-gke-demos/ingress-example-accounts-svc:v1
+          # This app listens on port 8080 for web traffic by default.
+          ports:
+            - name: go-port
+              containerPort: 8080

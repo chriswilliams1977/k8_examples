@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-ingress-banks-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: banks
+  template:
+    metadata:
+      labels:
+        app: banks
+    spec:
+      containers:
+        - name: go-ingress-banks
+          # Replace $GCLOUD_PROJECT with your project ID
+          image: gcr.io/williamscj-gke-demos/ingress-example-banks-svc:v1
+          # This app listens on port 8081 for web traffic by default.
+          ports:
+            - name: go-port
+              containerPort: 8081

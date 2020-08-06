@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-configmap-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: simple
+  template:
+    metadata:
+      labels:
+        app: simple
+    spec:
+      containers:
+        - name: go-simple
+          # Replace $GCLOUD_PROJECT with your project ID
+          image: gcr.io/williamscj-gke-demos/go-configmap:v5
+          # This app listens on port 8080 for web traffic by default.
+          ports:
+            - name: go-port
+              containerPort: 8080
+          #you can use env vars to load literals from configmap
+          env:
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: message
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/creds
+              readOnly: true
+      #use this when using files as configmaps
+      volumes:
+        - name: config-volume
+          configMap:
+            name: db-config
+            items:
+              - key: "app.properties"
+                path: "app.properties"
