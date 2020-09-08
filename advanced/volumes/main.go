@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/chriswilliams1977/gomysqlinterfaceexample/models"
+	"github.com/chriswilliams1977/volumes/models"
 	"log"
 	"net/http"
 	"os"
