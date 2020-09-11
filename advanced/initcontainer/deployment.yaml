@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: test-app
+  name: test-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-app
+  template:
+    metadata:
+      labels:
+        app: test-app
+    spec:
+      volumes:
+        - name: test-volume
+          persistentVolumeClaim:
+            claimName: test-pvc
+      containers:
+        - name: go-initc
+          # Replace $GCLOUD_PROJECT with your project ID
+          image: gcr.io/williamscj-gke-demos/go-initc:v3
+          # This app listens on port 8080 for web traffic by default.
+          ports:
+            - name: go-port
+              containerPort: 8080
+          volumeMounts:
+            - name: test-volume
+              mountPath: /tmp
+      initContainers:
+        - name: init-myservice
+          image: busybox:1.28
+          command: ['sh', '-c', "echo 'Chris Williams' > /tmp/names.txt"]
+          volumeMounts:
+            - name: test-volume
+              mountPath: /tmp
