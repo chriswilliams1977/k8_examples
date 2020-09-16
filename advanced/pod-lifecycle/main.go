@@ -2,7 +2,7 @@ package main
 
 import(
 	"fmt"
-	"github.com/chriswilliams1977/initcontainer/datafile"
+	"github.com/chriswilliams1977/lifecycle/datafile"
 	"log"
 	"net/http"
 	"os"
@@ -27,12 +27,12 @@ func main(){
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	//Get data from file at /tmp/names.txt
-	names, counts := datafile.GetDataUsingSlice("/tmp/names.txt")
+	records, counts := datafile.GetDataUsingSlice("/tmp/names.txt")
 	//print names and count
-	for i, name := range names{
+	for i, record := range records{
 		//prints to logs
-		fmt.Printf("%s: %d\n", name, counts[i])
+		fmt.Printf("%s: %d\n", record, counts[i])
 		//prints to window
-		fmt.Fprintf(w, "%s: %d\n", name, counts[i])
+		fmt.Fprintf(w, "%s: %d\n", record, counts[i])
 	}
 }

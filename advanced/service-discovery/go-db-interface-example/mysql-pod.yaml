@@ -5,6 +5,9 @@ metadata:
   labels:
     app: mysql-interface-database
 spec:
+  #this is not using a volume thus data is written locally to the container filesystem
+  #if container dies data is lost
+  #use PV to persist data across pod restarts
   containers:
     - name: mysql
       image: mysql:5.7

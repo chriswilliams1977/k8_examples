@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: lifecycle-app
+  name: lifecycle-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lifecycle-app
+  template:
+    metadata:
+      labels:
+        app: lifecycle-app
+    spec:
+      volumes:
+        - name: lifecycle-volume
+          persistentVolumeClaim:
+            claimName: lifecycle-pvc
+      containers:
+        - name: go-lifecycle
+          # Replace $GCLOUD_PROJECT with your project ID
+          image: gcr.io/williamscj-gke-demos/go-lifecycle:v3
+          # This app listens on port 8080 for web traffic by default.
+          ports:
+            - name: go-port
+              containerPort: 8080
+          volumeMounts:
+            - name: lifecycle-volume
+              mountPath: /tmp
+          lifecycle:
+            #PostStart hook executes immediately after container is created
+            postStart:
+              exec:
+                command:
+                  - "bin/sh"
+                  - "-c"
+                  - 'echo $(date): Invoking post start >> /tmp/names.txt'
+            #PreStop hook is called just before the container is terminated
+            preStop:
+              exec:
+                command:
+                  - 'bin/sh'
+                  - '-c'
+                  - 'echo $(date): Invoking Pre Stop >> /tmp/names.txt'
+      #create an init container that creates a files on the PV mounted at /tmp
+      #and write Chris Williams to it
+      initContainers:
+        - name: init-lifecycleservice
+          image: busybox:1.28
+          command: ['sh', '-c', "echo 'Chris Williams' > /tmp/names.txt"]
+          volumeMounts:
+            - name: lifecycle-volume
+              mountPath: /tmp

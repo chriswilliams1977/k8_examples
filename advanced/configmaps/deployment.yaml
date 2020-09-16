@@ -32,6 +32,7 @@ spec:
               mountPath: /etc/creds
               readOnly: true
       #use this when using files as configmaps
+      #this volume is on the local filesystem of the container
       volumes:
         - name: config-volume
           configMap:

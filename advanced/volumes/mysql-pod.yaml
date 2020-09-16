@@ -32,12 +32,15 @@ spec:
             secretKeyRef:
               name: mysql-vol-secrets
               key: database
+      #mount volume to /var/lib/mysql
       volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
           #use a subPath on the volumeMounts object. This uses a subdirectory of the PersistentVolume,
           #which should be empty at creation time, instead of the volume root:
           subPath: mysql
+  #Create volume based on pvc mysql-volumeclaim
+  #GKE create a volume using persistent disk
   volumes:
     - name: mysql-persistent-storage
       persistentVolumeClaim:

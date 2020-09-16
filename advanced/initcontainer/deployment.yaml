@@ -29,6 +29,8 @@ spec:
           volumeMounts:
             - name: test-volume
               mountPath: /tmp
+      #create an init container that creates a files on the PV mounted at /tmp
+      #and write Chris Williams to it
       initContainers:
         - name: init-myservice
           image: busybox:1.28
