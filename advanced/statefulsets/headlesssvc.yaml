@@ -1,0 +1,16 @@
+#headless service - does not contain a ClusterIP
+#When combined with StatefulSets, they can give you unique DNS addresses that let you directly access the pods.
+#This is perfect for creating MongoDB replica sets, because our app needs to connect to all of the MongoDB nodes individually.
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    name: mongo
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+  clusterIP: None
+  selector:
+    role: mongo

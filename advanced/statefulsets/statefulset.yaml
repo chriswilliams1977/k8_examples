@@ -1,0 +1,52 @@
+#Kubernetes StatefulSets will deploy each pod sequentially.
+#It will wait for the MongoDB Replica Set member to fully boot up and create the backing disk before starting the next member.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec:
+  selector:
+    matchLabels:
+      role: mongo
+  serviceName: "mongo"
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        role: mongo
+        environment: test
+    spec:
+      #terminationGracePeriodSeconds is used to gracefully shutdown the pod when you scale down the number of replicas
+      #important for databases
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mongo
+          image: mongo
+          #command line flags that configure the replica set name
+          command:
+            - mongod
+            - "--replSet"
+            - rs0
+          ports:
+            - containerPort: 27017
+          #mounts the persistent storage volume to /data/db, the location where MongoDB saves its data
+          volumeMounts:
+            - name: mongo-persistent-storage
+              mountPath: /data/db
+        #sidecar to configure the MongoDB replica set automatically - helps the main container do its work
+        - name: mongo-sidecar
+          image: cvallance/mongo-k8s-sidecar
+          env:
+            - name: MONGO_SIDECAR_POD_LABELS
+              value: "role=mongo,environment=test"
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-persistent-storage
+        annotations:
+          #uses storageclass defined in yaml
+          volume.beta.kubernetes.io/storage-class: "fast"
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 100Gi

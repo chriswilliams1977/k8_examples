@@ -1,0 +1,9 @@
+#create a GKE storage call called fast
+#using gce SSD's
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+  name: fast
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
