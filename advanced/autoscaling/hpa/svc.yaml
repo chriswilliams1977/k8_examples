@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-autoscaling-svc
+  labels:
+    app: go-autoscaling-svc
+spec:
+  selector:
+    app: go-autoscaling
+    tier: web
+  ports:
+    #valid values for node port are 30000-32767
+    - port: 31001
+      nodePort: 31001
+      targetPort: 8080
+      protocol: TCP
+  type: NodePort
+  #this violates internal policy
+  #type: LoadBalancer
+  #this violates internal policy
+  #use with static IP
+  #loadBalancerIP: "YOUR.IP.ADDRESS.HERE"

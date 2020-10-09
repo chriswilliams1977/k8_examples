@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-autoscaling
+  labels:
+    app: go-autoscaling
+spec:
+  selector:
+    matchLabels:
+      app: go-autoscaling
+      tier: web
+  template:
+    metadata:
+      labels:
+        app: go-autoscaling
+        tier: web
+    spec:
+      containers:
+        - name: autoscaling
+          image: gcr.io/williamscj-demos/go-autoscaling:v1
+          ports:
+            - containerPort: 8080

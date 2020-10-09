@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: go-autoscaling
+  annotations:
+    #this is blocked internally
+    kubernetes.io/ingress.global-static-ip-name: go-autoscaling-ip
+  labels:
+    app: go-autoscaling
+spec:
+  backend:
+    serviceName: go-autoscaling-backend
+    servicePort: 8080
