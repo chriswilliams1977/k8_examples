@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-affinity-svc
+  labels:
+    app: go-affinity-svc
+spec:
+  selector:
+    app: affinity-web
+  ports:
+    #valid values for node port are 30000-32767
+    - port: 31001
+      nodePort: 31001
+      targetPort: 8080
+      protocol: TCP
+  type: NodePort

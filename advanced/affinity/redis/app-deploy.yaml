@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: affinity-web
+  name: affinity-web
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: affinity-web
+  template:
+    metadata:
+      labels:
+        app: affinity-web
+    spec:
+      # Pod anti affinity config START
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - affinity-web
+              topologyKey: kubernetes.io/hostname
+      # Pod anti affinity config END
+      containers:
+        - image: gcr.io/williamscj-demos/affinityredis:v1  # change to the image name you built
+          name: affinity-web
+          # Readiness probe config START
+          readinessProbe:
+            failureThreshold: 1
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 1
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 1
+# [END container_helloapp_redis]
