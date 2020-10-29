@@ -1,4 +1,5 @@
 #service discovery
+#in every pod  /etc/resolv.conf file is modified to make sure all DNS lookups go to an internal DNS server
 #containers within pod can use localhost:port to connect
 #pods running on other nodes in cluster use service discovery to find each other
 #because you dont know ip or port

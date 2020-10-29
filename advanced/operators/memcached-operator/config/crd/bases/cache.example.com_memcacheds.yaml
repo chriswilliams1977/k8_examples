@@ -1,0 +1,79 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.3.0
+  creationTimestamp: null
+  name: memcacheds.cache.example.com
+spec:
+  group: cache.example.com
+  names:
+    kind: Memcached
+    listKind: MemcachedList
+    plural: memcacheds
+    singular: memcached
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      description: define the types corresponding to actual Kinds, Memcached and MemcachedList
+        Memcached is our root type, and describes the Memcached kind Like all Kubernetes
+        objects, it contains TypeMeta (which describes API version and Kind) ObjectMeta,
+        which holds things like name, namespace, and labels Memcached is the Schema
+        for the memcacheds API adds a status subresource to the CRD manifest so that
+        the controller can update the CR status without changing the rest of the CR
+        object
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: define types for the Spec and Status of our Kind Kubernetes
+            functions by reconciling desired state (Spec) //with actual cluster state
+            (other objects’ Status) and external state, //and then recording what
+            it observed (Status) every functional object includes spec and status
+            MemcachedSpec defines the desired state of Memcached
+          properties:
+            size:
+              description: Size is the size of the memcached deployment
+              format: int32
+              minimum: 0
+              type: integer
+          required:
+          - size
+          type: object
+        status:
+          description: MemcachedStatus defines the observed state of Memcached
+          properties:
+            nodes:
+              description: Nodes are the names of the memcached pods
+              items:
+                type: string
+              type: array
+          required:
+          - nodes
+          type: object
+      type: object
+  version: v1beta1
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

@@ -24,6 +24,7 @@
 #Two types
 #requiredDuringScheduledIgnoredDuringExecution - hard requirement (must be met to be scheduled)
 #preferredDuringScheduledIgnoredDuringExecution - try to enforce but not guaranteed
+#With preferred, the pod will always be scheduled, even if the rules don't match
 #scoring done by matching rules and the  weight of the rule
 #node with highest score is where pod get scheduled
 #you can your own lables to nodes or use pre-populated ones like kubernetes.io/hostname
@@ -35,11 +36,14 @@
 #So node affinity attracts a pod to certain nodes, and pod affinity attracts a pod to certain pods.
 #Pod affinity furthermore has its opposite in pod anti-affinity, which as you would expect repels a pod from other pods.
 
-#interpod affinity and anit affinity
+#interpod affinity and anti affinity
 #allows you to influence scheduling based on labels of pds already running
 #applies to specific namespace, use default if not specified
 #same as node affinity/anit affinity it has two types
 #requiredDuringScheduledIgnoredDuringExecution and preferredDuringScheduledIgnoredDuringExecution
+#Anti-affinity makes sure that a pod is not scheduled next to another pod. the required rule makes sure that when the
+#rule doesn't match, the pod is not scheduled at all
+
 #Good to use to colocate pods on same node or colocate pods in same zone
 #you need to specify topology domain called topologyKey in the rules
 #this refers to a node label - if node label matches topologyKey pod is scheduled on that node

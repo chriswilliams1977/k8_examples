@@ -1,4 +1,8 @@
 #Ingress is an alternative to loadbalancer and nodeport
+#With an ingress controller you can potentially save costs.
+#Rather than using 1 LoadBalancer per public application, you can use the ingress controller as a gateway for
+#all your public apps, and only use 1 LoadBalancer in front of the ingress-controller
+
 #exposes services that need access outside the cluster
 #can use default or custom ingress controllers
 #GKE Ingress Controller uses GCLB

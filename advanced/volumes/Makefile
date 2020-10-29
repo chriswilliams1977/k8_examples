@@ -1,6 +1,9 @@
 #Volumes let your pod write to a filesystem that exists as long as the pod exists. ...
 #ConfigMap and Secrets use filesystem by default
+
 #Persistent volumes are long-term storage in your Kubernetes cluster.
+#If the cluster is within the same availability zone, the pods with a PV will be able to reschedule on any node.
+#Pod can be reattached to PV If the cluster is within the same availability zone, the pods with a PV will be able to reschedule on a node within the same availability zone.
 #Persistent volumes exist beyond containers, pods, and nodes. A pod uses a persistent volume claim to to
 #get read and write access to the persistent volume.
 #persistent volume (PV) is the "physical" volume on the host machine that stores your persistent data.

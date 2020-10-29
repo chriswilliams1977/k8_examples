@@ -1,4 +1,5 @@
 #Config params that are not secret
+#ConfigMap object is the best way to provide a config file to a container, without having to rebuild the app to see new configuration files
 #Key-value pairs
 #can be read using env var, cmd line, volumes
 #If you want to include these as env vars direct in code use literals
